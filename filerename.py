@@ -1,7 +1,7 @@
 import os
 import glob
 
-target = "외질혜"
+target = "테스터훈"
 fpath = "./data/"+str(target)+"/\*.jpg"  #해당 폴더안에 jpg 확장자 모두 불러오기
 for fpath in glob.glob(fpath):
     fpath_r = fpath.replace(str(target),'') #selfie (27).jpg => (27).jpg로 변경

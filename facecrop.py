@@ -1,17 +1,21 @@
 import cv2
+import os
 
 face_cascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
 eye_casecade = cv2.CascadeClassifier('./haarcascade_eye.xml')
 
 count = 1
-targetFolder = 'dhlwlfgP'
+targetFolder = 'rlawodnjs'
+
+if not os.path.exists('processed'):
+    os.mkdir('processed')
+if not os.path.exists('processed/' + targetFolder):
+    os.mkdir('processed/' + targetFolder)
 
 
 def crop():
-    global imgNum
-    global img
     global count
-    global gray
+
     img = cv2.imread(r'.\data\\'+targetFolder+'\\'+str(count)+'.jpg')
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(gray, 1.3,5)
@@ -21,10 +25,11 @@ def crop():
     cv2.imshow('ImageProcessing', img)
 
     try:
+        print(str(count) + '번째 이미지 프로세싱중.')
         for (x,y,w,h) in faces:
             cropped = img[y - int(h / 4):y + h + int(h / 4), x - int(w / 4):x + w + int(w / 4)]
             # 이미지를 저장
-            cv2.imwrite(targetFolder + '_' + str(count) + "["+str(imgNum)+"].jpg", cropped)
+            cv2.imwrite('./processed/'+targetFolder+'/'+ targetFolder + '_' + str(count) + "["+str(imgNum)+"].jpg", cropped)
             imgNum += 1
 
             cv2.rectangle(img, (x,y), (x+w, y+h), (255,0,0),2)
@@ -34,7 +39,7 @@ def crop():
             for (ex, ey, ew, eh) in eyes:
                 cv2.rectangle(roi_color, (ex,ey), (ex+ew, ey+eh),(0,255,0),2)
     except:
-        print("[Facecrop] 사진에서 얼굴이 검출되지 못하여 다음사진으로 넘어갑니다.")
+        print("[Facecrop] 사진에서 얼굴을 검출하지 못하여 다음사진으로 넘어갑니다.")
         count += 1
         cv2.destroyWindow('ImageProcessing')
         crop()
