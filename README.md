@@ -1,0 +1,4 @@
+# FaceCrop
+
+## requirement
+- opencv
